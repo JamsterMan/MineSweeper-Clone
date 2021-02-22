@@ -1,2 +1,2 @@
 # MineSweeper-Clone
-Clone of
+Clone of MineSweeper

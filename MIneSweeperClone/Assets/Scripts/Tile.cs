@@ -23,6 +23,21 @@ public class Tile : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = coverSprite;
     }
 
+    /* sets the icon and type of the tile
+     * icon is the string name of the icon for the tile in the graphics folder
+     * tile is the TileType val
+     */
+    public void SetTile(string icon, TileType tile)
+    {
+        defaultSprite = Resources.Load<Sprite>("Graphics/" + icon);
+        type = tile;
+    }
+
+    public void SetMineNeighbors(int mines)
+    {
+        mineNeighbors = mines;
+    }
+
     public void RevealTile()
     {
         isCovered = false;
@@ -43,6 +58,7 @@ public class Tile : MonoBehaviour
 
     public void HitMine()
     {
+        Debug.Log("mine hit :" + type);
         GetComponent<SpriteRenderer>().sprite = hitMineSprite;
     }
 

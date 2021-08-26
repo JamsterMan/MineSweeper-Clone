@@ -11,10 +11,10 @@ public class Game : MonoBehaviour
     static public int SetNumMines = 0;
     public int numFlags = 0;
     public int numCoveredTiles = 0;
-    private int xOld, yOld = 0;
-    private bool[,] gridMines;
+    private int xOld, yOld = -1;
     private bool gameOver = false;
     private bool middleFunc = false;
+    private bool firstReveal = true;
     public Text mineCounter;
     public Text mineSlider;
     //public ChangeMines mineSlider;
@@ -32,13 +32,12 @@ public class Game : MonoBehaviour
         slider.value = numMines;
         numCoveredTiles = width * height;
         grid = new Tile[width, height];
-        gridMines = new bool[width, height];
         gameOver = false;
         numFlags = 0;
 
-        for (int m = 0; m < numMines; m++) { // place mines in the field
+        /*for (int m = 0; m < numMines; m++) { // place mines in the field
             PlaceMines();
-        }
+        }*/
 
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
@@ -51,12 +50,15 @@ public class Game : MonoBehaviour
     void Update()
     {
         if (!gameOver) {
-            if (Input.GetButtonDown("Fire1")) {//reveal a tile
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                int x = Mathf.RoundToInt(mousePosition.x);
-                int y = Mathf.RoundToInt(mousePosition.y);
-
-                if (x >= 0 && x < width && y >= 0 && y < height) {//check if mouse was in the game field
+            Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            int x = Mathf.RoundToInt(mousePosition.x);
+            int y = Mathf.RoundToInt(mousePosition.y);
+            if (x >= 0 && x < width && y >= 0 && y < height) {//check if mouse was in the game field
+                if (Input.GetButtonDown("Fire1")) {//reveal a tile
+                    if (firstReveal) {
+                        PlaceMines(x,y);
+                        firstReveal = false;
+                    }
                     Tile tile = grid[x, y];
                     if (tile.isCovered && !tile.isFlaged) {//cant reveal a flaged tile
                         tile.RevealTile();
@@ -68,13 +70,7 @@ public class Game : MonoBehaviour
                             GameLost();
                         }
                     }
-                }
-            } else if (Input.GetButtonDown("Fire2")) {//flag a tile
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                int x = Mathf.RoundToInt(mousePosition.x);
-                int y = Mathf.RoundToInt(mousePosition.y);
-
-                if (x >= 0 && x < width && y >= 0 && y < height) {//check if mouse was in the game field
+                } else if (Input.GetButtonDown("Fire2")) {//flag a tile
                     Tile tile = grid[x, y];
                     if (tile.isCovered) {//cant flag revealed tiles
                         if (tile.isFlaged) {//if tile is already flaged
@@ -87,35 +83,31 @@ public class Game : MonoBehaviour
                             tile.FlagTile();
                         }
                     }
-                }
-            } else if (Input.GetButtonDown("Fire3")) {//turn on highlight
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                int x = Mathf.RoundToInt(mousePosition.x);
-                int y = Mathf.RoundToInt(mousePosition.y);
-                if (x >= 0 && x < width && y >= 0 && y < height) {//check if mouse was in the game field
+                } else if (Input.GetButtonDown("Fire3")) {//turn on highlight
                     middleFunc = true;
                     HighlightNeighbors(x, y);
                     xOld = x;
                     yOld = y;
-                }
-            } else if (Input.GetButtonUp("Fire3")) {//turn of highlight
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                int x = Mathf.RoundToInt(mousePosition.x);
-                int y = Mathf.RoundToInt(mousePosition.y);
-                if (x >= 0 && x < width && y >= 0 && y < height) {//check if mouse was in the game field
+                } else if (Input.GetButtonUp("Fire3")) {//turn off highlight
                     middleFunc = false;
                     UnHighlightNeighbors(x, y);
                 }
             }
             if (middleFunc) {//highlight surronding uncovered tiles, and reveal tile if correct number of flags present
-                Vector3 mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-                int x = Mathf.RoundToInt(mousePosition.x);
-                int y = Mathf.RoundToInt(mousePosition.y);
                 if (xOld != x || yOld != y) {
-                    UnHighlightNeighbors(xOld, yOld);
-                    HighlightNeighbors(x, y);
-                    xOld = x;
-                    yOld = y;
+                    if(xOld >= 0 && yOld >= 0)
+                        UnHighlightNeighbors(xOld, yOld);
+                    if (x >= 0 && x < width && y >= 0 && y < height) { //check if mouse was in the game field
+                        HighlightNeighbors(x, y);
+                        xOld = x;
+                        yOld = y;
+                    } else {
+                        if (Input.GetButtonUp("Fire3")) {//turn off highlight
+                            middleFunc = false;
+                            xOld = -1;
+                            yOld = -1;
+                        }
+                    }
                 }
             }
             if (numFlags + numCoveredTiles == numMines || numFlags == numMines) {//checks if win condition met
@@ -136,7 +128,13 @@ public class Game : MonoBehaviour
                             RevealNeighbors(x + xOff, y + yOff);
                         } else if(grid[x + xOff, y + yOff].isCovered) {
                             numCoveredTiles--;
-                            grid[x + xOff, y + yOff].RevealTile();
+                            if (grid[x + xOff, y + yOff].type == Tile.TileType.Mine) {
+                                grid[x + xOff, y + yOff].RevealTile();
+                                grid[x + xOff, y + yOff].HitMine();
+                                GameLost();
+                            } else {
+                                grid[x + xOff, y + yOff].RevealTile();
+                            }
                         }
                     }
                 }
@@ -236,43 +234,51 @@ public class Game : MonoBehaviour
         ResetGame();
     }
 
-    void PlaceMines()
+    /* Sets tiles to mines
+     * mousex and mousey are the tile clicked that cant be a mine
+     */
+    void PlaceMines(int mouseX, int mouseY)
     {
-        int x = Random.Range(0, width);
-        int y = Random.Range(0, height);
+        int x, y;
+        for (int m = 0; m < numMines; m++) { // place mines in the field
+            x = Random.Range(0, width);
+            y = Random.Range(0, height);
 
-        if(grid[x,y] == null){
-            Tile mine = Instantiate(Resources.Load("Prefabs/Mine", typeof(Tile)), new Vector3(x,y,0), Quaternion.identity) as Tile;
-            grid[x, y] = mine;
-            gridMines[x, y] = true;
-        }else{
-            PlaceMines();
+            while(grid[x, y].type == Tile.TileType.Mine || (x == mouseX && y == mouseY)) {//makes sure no mine placements overlap
+                x = Random.Range(0, width);
+                y = Random.Range(0, height);
+            }
+            grid[x, y].SetTile("Mine", Tile.TileType.Mine);
+        }
+
+        for (x = 0; x < width; x++) {
+            for (y = 0; y < height; y++) {
+                if (grid[x, y].type != Tile.TileType.Mine){
+                    int total = 0;
+                    for (int xOff = -1; xOff <= 1; xOff++) {
+                        for (int yOff = -1; yOff <= 1; yOff++) {
+                            if (x + xOff > -1 && x + xOff < width && y + yOff > -1 && y + yOff < height) {//for coner tiles
+                                if (grid[x + xOff, y + yOff].type == Tile.TileType.Mine) {
+                                    total++;
+                                }
+                            }
+                        }
+                    }
+                    if (total == 0) {
+                        grid[x, y].SetTile("Empty", Tile.TileType.Blank);
+                    } else {
+                        grid[x, y].SetTile("" + total, Tile.TileType.Num);
+                        grid[x, y].SetMineNeighbors(total);
+                    }
+                }
+            }
         }
     }
 
     void PlaceTiles(int x, int y)
     {
-        if (gridMines[x, y] == false) {//figure out neighbors here
-            int total = 0;
-            for (int xOff = -1; xOff <= 1; xOff++) {
-                for (int yOff = -1; yOff <= 1; yOff++) {
-                    if (x + xOff > -1 && x + xOff < width && y + yOff > -1 && y + yOff < height) {//for coner tiles
-                        if (gridMines[x + xOff, y + yOff]) {
-                            total++;
-                        }
-                    }
-                }
-            }
-            if (total == 0) {
-                Tile tile = Instantiate(Resources.Load("Prefabs/Empty", typeof(Tile)), new Vector3(x, y, 0), Quaternion.identity) as Tile;
-                grid[x, y] = tile;
-            }
-            else {
-                Tile tile = Instantiate(Resources.Load("Prefabs/"+total, typeof(Tile)), new Vector3(x, y, 0), Quaternion.identity) as Tile;
-                tile.mineNeighbors = total;
-                grid[x, y] = tile;
-            }
-        }
+        Tile tile = Instantiate(Resources.Load("Prefabs/Empty", typeof(Tile)), new Vector3(x, y, 0), Quaternion.identity) as Tile;
+        grid[x, y] = tile;
     }
 
     public void SetText()

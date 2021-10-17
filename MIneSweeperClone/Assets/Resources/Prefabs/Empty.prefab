@@ -70,7 +70,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 5e0468b9b4c631d4d99a1ce81c15e211, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -95,9 +95,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  mineNeighbors: 0
   isCovered: 1
   isFlaged: 0
-  coverSprite: {fileID: 21300000, guid: 5c24cac872eaf8245b40f3f2b0f0643e, type: 3}
+  coverSprite: {fileID: 21300000, guid: 53c3e22bb4bb2714b9a88b11076ee30a, type: 3}
   flagSprite: {fileID: 21300000, guid: 23ecf7e4d2a8d7443a945739cf97289b, type: 3}
   hitMineSprite: {fileID: 21300000, guid: 4fa82db2ae4e5ca4e886f67e432fa014, type: 3}
   missFlagSprite: {fileID: 21300000, guid: 04d509ad6e9c9c84b9ccfc1c883fd331, type: 3}

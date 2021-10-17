@@ -21,12 +21,8 @@ public class ChangeZoom : MonoBehaviour
         offset.y = 0f;//hieght
         offset.z = 0f;
         
-        //if (game.width != expectedVal) {//change x position of camera to fit the minefield
-            offset.x = offsetChange * (game.width - expectedVal);
-        //}
-        //if (game.height != expectedVal) {//change y position of camera to fit the minefield
-            offset.y = offsetChange * (game.height - expectedVal);
-        //}
+        offset.x = offsetChange * (game.width - expectedVal);//change x position of camera to fit the minefield
+        offset.y = offsetChange * (game.height - expectedVal);//change y position of camera to fit the minefield
         transform.position = defaultPosition + offset;
 
         if( game.width >= game.height) {

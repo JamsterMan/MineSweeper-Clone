@@ -16,9 +16,9 @@ public class Game : MonoBehaviour
     private bool middleFunc = false;
     private bool firstReveal = true;
     public Text mineCounter;
-    public Text mineSlider;
+    //public Text mineSlider;
     //public ChangeMines mineSlider;
-    public Slider slider;
+    //public Slider slider;
 
 
     void Start()
@@ -27,17 +27,14 @@ public class Game : MonoBehaviour
             numMines = SetNumMines;
         }
         mineCounter.text = "" + numMines;
-        mineSlider.text = "" + numMines;
+        //mineSlider.text = "" + numMines;
         //mineSlider.UpdateText(numMines);
-        slider.value = numMines;
+    //    slider.value = numMines;
         numCoveredTiles = width * height;
         grid = new Tile[width, height];
         gameOver = false;
         numFlags = 0;
 
-        /*for (int m = 0; m < numMines; m++) { // place mines in the field
-            PlaceMines();
-        }*/
 
         for (int i = 0; i < width; i++){
             for (int j = 0; j < height; j++){
@@ -230,7 +227,7 @@ public class Game : MonoBehaviour
 
     public void SetMines()
     {
-        SetNumMines = (int)Mathf.Round(slider.value);
+        //SetNumMines = (int)Mathf.Round(slider.value);
         ResetGame();
     }
 
@@ -283,6 +280,6 @@ public class Game : MonoBehaviour
 
     public void SetText()
     {
-        mineSlider.text = "" + slider.value;
+        //mineSlider.text = "" + slider.value;
     }
 }

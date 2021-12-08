@@ -273,6 +273,7 @@ public class Game : MonoBehaviour
 
     }
 
+    //remakes board of width and height
     void MakeNewBoard()
     {
         for (int i = 0; i < width; i++) {
@@ -329,7 +330,6 @@ public class Game : MonoBehaviour
     {
         GameObject gameObject = Instantiate(Resources.Load("Prefabs/Empty", typeof(GameObject)), new Vector3(x, y, 0), Quaternion.identity) as GameObject;
         Tile tile = gameObject.GetComponent<Tile>();
-        //Tile tile = Instantiate(Resources.Load("Prefabs/Empty", typeof(Tile)), new Vector3(x, y, 0), Quaternion.identity) as Tile;
 
         objectGrid[x, y] = gameObject;
         grid[x, y] = tile;

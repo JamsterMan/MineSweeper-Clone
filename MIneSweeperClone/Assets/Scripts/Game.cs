@@ -17,9 +17,6 @@ public class Game : MonoBehaviour
     private bool middleFunc = false;
     private bool firstReveal = true;
     public Text mineCounter;
-    //public Text mineSlider;
-    //public ChangeMines mineSlider;
-    //public Slider slider;
 
 
     void Start()
@@ -28,9 +25,6 @@ public class Game : MonoBehaviour
             numMines = SetNumMines;
         }
         mineCounter.text = "" + numMines;
-        //mineSlider.text = "" + numMines;
-        //mineSlider.UpdateText(numMines);
-    //    slider.value = numMines;
         numCoveredTiles = width * height;
         grid = new Tile[width, height];
         gameOver = false;
@@ -117,6 +111,7 @@ public class Game : MonoBehaviour
         }
     }
 
+    //reveals tiles around x, y
     void RevealNeighbors(int x, int y)
     {
         for (int xOff = -1; xOff <= 1; xOff++) {
@@ -143,6 +138,7 @@ public class Game : MonoBehaviour
         }
     }
 
+    //highlights tiles around x, y
     void HighlightNeighbors(int x, int y)
     {
         int totalFlags = 0;
@@ -164,6 +160,8 @@ public class Game : MonoBehaviour
             middleFunc = false;
         }
     }
+    
+    //unhighlighs tiles around x, y
     void UnHighlightNeighbors(int x, int y)
     {
         for (int xOff = -1; xOff <= 1; xOff++) {
@@ -179,6 +177,7 @@ public class Game : MonoBehaviour
         }
     }
 
+    //reveals mines and mistake after losing
     void GameLost()
     {
         //game over
@@ -196,6 +195,7 @@ public class Game : MonoBehaviour
         }
     }
 
+    //checks if the player has flagged all the mines or revealed all non mines
     void CheckWin()
     {
         int correctFlags = 0;
@@ -224,16 +224,28 @@ public class Game : MonoBehaviour
         }
     }
 
+    //Resets the gameboard
     public void ResetGame()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        ClearBoard();
+        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 
-    public void SetMines()
+    //sets all tiles back to empty tiles
+    void ClearBoard()
     {
-        //SetNumMines = (int)Mathf.Round(slider.value);
-        ResetGame();
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                grid[i, j].SetTile("Empty", Tile.TileType.Blank);
+                grid[i, j].CoverTile();
+            }
+        }
+        firstReveal = true;//makes it so mines are place after the next click
+        gameOver = false;//allows player to click again
     }
+
+    
+
 
     /* Sets tiles to mines
      * mousex and mousey are the tile clicked that cant be a mine
@@ -282,8 +294,4 @@ public class Game : MonoBehaviour
         grid[x, y] = tile;
     }
 
-    public void SetText()
-    {
-        //mineSlider.text = "" + slider.value;
-    }
 }

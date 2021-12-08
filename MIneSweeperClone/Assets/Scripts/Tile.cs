@@ -45,6 +45,13 @@ public class Tile : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = defaultSprite;
     }
 
+    public void CoverTile()
+    {
+        isCovered = true;
+        isFlaged = false;
+        GetComponent<SpriteRenderer>().sprite = coverSprite;
+    }
+
     public void FlagTile()
     {
         isFlaged = true;

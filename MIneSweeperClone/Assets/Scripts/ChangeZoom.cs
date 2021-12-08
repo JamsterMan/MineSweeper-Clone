@@ -15,24 +15,28 @@ public class ChangeZoom : MonoBehaviour
 
     void Start()
     {
-        float sizeVal = 0f;
+        ZoomCameraOnBoard();
+    }
+
+    public void ZoomCameraOnBoard()
+    {
+        float sizeVal;
         Vector3 offset;
         offset.x = 0f;//width
         offset.y = 0f;//hieght
         offset.z = 0f;
-        
+
         offset.x = offsetChange * (game.width - expectedVal);//change x position of camera to fit the minefield
         offset.y = offsetChange * (game.height - expectedVal);//change y position of camera to fit the minefield
         transform.position = defaultPosition + offset;
 
-        if( game.width >= game.height) {
+        if (game.width >= game.height) {
             sizeVal = sizeChange * (game.width - expectedVal);
         } else {
             sizeVal = sizeChange * (game.height - expectedVal);
         }
 
         mainCamera.orthographicSize = defaultSize + sizeVal;
-
     }
 
 }

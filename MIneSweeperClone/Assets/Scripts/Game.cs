@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 public class Game : MonoBehaviour
 {
-    public Tile[,] grid;
+    private Tile[,] grid;
+    private GameObject[,] objectGrid;
     public int width = 10;
     public int height = 10;
     public int numMines = 12;
@@ -17,6 +18,7 @@ public class Game : MonoBehaviour
     private bool middleFunc = false;
     private bool firstReveal = true;
     public Text mineCounter;
+    public ChangeZoom zoomCam;
 
 
     void Start()
@@ -27,6 +29,7 @@ public class Game : MonoBehaviour
         mineCounter.text = "" + numMines;
         numCoveredTiles = width * height;
         grid = new Tile[width, height];
+        objectGrid = new GameObject[width, height];
         gameOver = false;
         numFlags = 0;
 
@@ -227,12 +230,11 @@ public class Game : MonoBehaviour
     //Resets the gameboard
     public void ResetGame()
     {
-        ClearBoard();
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        ClearTiles();
     }
 
     //sets all tiles back to empty tiles
-    void ClearBoard()
+    void ClearTiles()
     {
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
@@ -244,7 +246,42 @@ public class Game : MonoBehaviour
         gameOver = false;//allows player to click again
     }
 
+    //Creates a new game board
+    public void NewBoard(int newWidth, int newHeight, int newMines)
+    {
+        ClearBoard();
+        width = newWidth;
+        height = newHeight;
+        numMines = newMines;
+        grid = new Tile[width, height];
+        objectGrid = new GameObject[width, height];
+        zoomCam.ZoomCameraOnBoard();
+        MakeNewBoard();
+    }
     
+    //clears the board to change board size
+    void ClearBoard()
+    {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                Destroy(objectGrid[i, j]);
+                Destroy(grid[i, j]);
+            }
+        }
+        firstReveal = true;//makes it so mines are place after the next click
+        gameOver = false;//allows player to click again
+
+    }
+
+    void MakeNewBoard()
+    {
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < height; j++) {
+                PlaceTiles(i, j);
+            }
+        }
+    }
+
 
 
     /* Sets tiles to mines
@@ -290,8 +327,17 @@ public class Game : MonoBehaviour
 
     void PlaceTiles(int x, int y)
     {
-        Tile tile = Instantiate(Resources.Load("Prefabs/Empty", typeof(Tile)), new Vector3(x, y, 0), Quaternion.identity) as Tile;
+        GameObject gameObject = Instantiate(Resources.Load("Prefabs/Empty", typeof(GameObject)), new Vector3(x, y, 0), Quaternion.identity) as GameObject;
+        Tile tile = gameObject.GetComponent<Tile>();
+        //Tile tile = Instantiate(Resources.Load("Prefabs/Empty", typeof(Tile)), new Vector3(x, y, 0), Quaternion.identity) as Tile;
+
+        objectGrid[x, y] = gameObject;
         grid[x, y] = tile;
     }
 
+    public void QuitGame()
+    {
+        Debug.Log("Quit Game");
+        Application.Quit();
+    }
 }

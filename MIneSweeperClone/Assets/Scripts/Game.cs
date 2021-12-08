@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
@@ -51,6 +52,9 @@ public class Game : MonoBehaviour
             int x = Mathf.RoundToInt(mousePosition.x);
             int y = Mathf.RoundToInt(mousePosition.y);
             if (x >= 0 && x < width && y >= 0 && y < height) {//check if mouse was in the game field
+                if (EventSystem.current.IsPointerOverGameObject())//stop clicks through UI
+                    return;
+
                 if (Input.GetButtonDown("Fire1")) {//reveal a tile
                     if (firstReveal) {
                         PlaceMines(x,y);

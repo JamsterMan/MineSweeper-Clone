@@ -33,11 +33,13 @@ public class Tile : MonoBehaviour
         type = tile;
     }
 
+    //Sets the number of how many tiles are mines
     public void SetMineNeighbors(int mines)
     {
         mineNeighbors = mines;
     }
 
+    //Reveals the tile, setting the sprite to what the tile is (aka mine, empty, or number tile)
     public void RevealTile()
     {
         isCovered = false;
@@ -45,6 +47,7 @@ public class Tile : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = defaultSprite;
     }
 
+    //covers a tile
     public void CoverTile()
     {
         isCovered = true;
@@ -52,33 +55,39 @@ public class Tile : MonoBehaviour
         GetComponent<SpriteRenderer>().sprite = coverSprite;
     }
 
+    //changes tiles icon to a flag tile sprite
     public void FlagTile()
     {
         isFlaged = true;
         GetComponent<SpriteRenderer>().sprite = flagSprite;
     }
+
+    //changes tiles icon to a covered tile sprite (removed a flag)
     public void UnflagTile()
     {
         isFlaged = false;
         GetComponent<SpriteRenderer>().sprite = coverSprite;
     }
 
+    //changes tiles icon to a hit mine sprite (player revealed a mine)
     public void HitMine()
     {
-        Debug.Log("mine hit :" + type);
         GetComponent<SpriteRenderer>().sprite = hitMineSprite;
     }
 
+    //changes tiles icon to a miss flag sprite (flag was placed on a safe tile)
     public void MissFlag()
     {
         GetComponent<SpriteRenderer>().sprite = missFlagSprite;
     }
 
+    //changes tiles icon to a highlighted tile sprite
     public void HighlightTile()
     {
         GetComponent<SpriteRenderer>().sprite = highlightSprite;
     }
 
+    //changes tiles icon to a covered tile sprite
     public void UnHighlightTile()
     {
         GetComponent<SpriteRenderer>().sprite = coverSprite;

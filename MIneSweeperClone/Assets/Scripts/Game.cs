@@ -22,7 +22,6 @@ public class Game : MonoBehaviour
 
     void Start()
     {
-        mineCounter.text = "" + numMines;
         grid = new Tile[width, height];
         objectGrid = new GameObject[width, height];
         SetStartValues();
@@ -44,13 +43,12 @@ public class Game : MonoBehaviour
             if (x >= 0 && x < width && y >= 0 && y < height) {//check if mouse was in the game field
                 if (EventSystem.current.IsPointerOverGameObject())//stop clicks through UI
                     return;
-
+                Tile tile = grid[x, y];
                 if (Input.GetButtonDown("Fire1")) {//reveal a tile on left mouse click
                     if (firstReveal) {
                         PlaceMines(x,y);
                         firstReveal = false;
                     }
-                    Tile tile = grid[x, y];
                     if (tile.isCovered && !tile.isFlaged) {//cant reveal a flaged tile
                         tile.RevealTile();
                         numCoveredTiles--;
@@ -63,7 +61,6 @@ public class Game : MonoBehaviour
                         CheckWin();
                     }
                 } else if (Input.GetButtonDown("Fire2")) {//flag a tile on right mouse click
-                    Tile tile = grid[x, y];
                     if (tile.isCovered) {//cant flag revealed tiles
                         if (tile.isFlaged) {//if tile is already flaged
                             numFlags--;
@@ -74,6 +71,7 @@ public class Game : MonoBehaviour
                             numCoveredTiles--;//flags are not counted as coveredTiles to make win check simpler
                             tile.FlagTile();
                         }
+                        SetMineCounterText(numMines - numFlags);
                         CheckWin();
                     }
                 } else if (Input.GetButtonDown("Fire3")) {//turn on highlight on middle mouse button pressed down
@@ -85,9 +83,10 @@ public class Game : MonoBehaviour
                     middleFunc = false;
                     UnHighlightNeighbors(x, y);
                 }
+
             }
             if (middleFunc) {//highlight surronding uncovered tiles, and reveal tile if correct number of flags present
-                if (xOld != x || yOld != y) {
+                if (xOld != x || yOld != y) {//check if mouse has moved from last position
                     if(xOld >= 0 && yOld >= 0)
                         UnHighlightNeighbors(xOld, yOld);
                     if (x >= 0 && x < width && y >= 0 && y < height) { //check if mouse was in the game field
@@ -103,10 +102,6 @@ public class Game : MonoBehaviour
                     }
                 }
             }
-            //if (numFlags + numCoveredTiles == numMines || numFlags == numMines) {//checks if win condition met
-            //    Debug.Log("Checking win");
-            //    CheckWin();
-            //}
         }
     }
 
@@ -137,23 +132,25 @@ public class Game : MonoBehaviour
     //highlights tiles around x, y
     void HighlightNeighbors(int x, int y)
     {
-        int totalFlags = 0;
-        for (int xOff = -1; xOff <= 1; xOff++) {
-            for (int yOff = -1; yOff <= 1; yOff++) {
-                if (x + xOff > -1 && x + xOff < width && y + yOff > -1 && y + yOff < height) {//for coner tiles
-                    if (!grid[x + xOff, y + yOff].isFlaged) {//dont highlight if flagged
-                        if (grid[x + xOff, y + yOff].isCovered) {
-                            grid[x + xOff, y + yOff].HighlightTile();
+        if (!grid[x, y].isFlaged) {//dont highlight a flag tiles neighbors
+            int totalFlags = 0;
+            for (int xOff = -1; xOff <= 1; xOff++) {
+                for (int yOff = -1; yOff <= 1; yOff++) {
+                    if (x + xOff > -1 && x + xOff < width && y + yOff > -1 && y + yOff < height) {//for coner tiles
+                        if (!grid[x + xOff, y + yOff].isFlaged) {//dont highlight if flagged
+                            if (grid[x + xOff, y + yOff].isCovered) {
+                                grid[x + xOff, y + yOff].HighlightTile();
+                            }
+                        } else {
+                            totalFlags++;
                         }
-                    } else {
-                        totalFlags++;
                     }
                 }
             }
-        }
-        if(grid[x, y].type == Tile.TileType.Num && grid[x,y].mineNeighbors == totalFlags) {//reveals neighbor tiles if the correct number of flags present
-            RevealNeighbors(x,y);
-            middleFunc = false;
+            if (grid[x, y].type == Tile.TileType.Num && grid[x, y].mineNeighbors == totalFlags) {//reveals neighbor tiles if the correct number of flags present
+                RevealNeighbors(x, y);
+                middleFunc = false;
+            }
         }
     }
     
@@ -343,5 +340,13 @@ public class Game : MonoBehaviour
         gameOver = false;//allows player to click again
         numCoveredTiles = width * height;//used for win calculation
         numFlags = 0;//used for win calculation
+        xOld = -1;
+        yOld = -1;
+        SetMineCounterText(numMines);
+    }
+
+    private void SetMineCounterText(int mineCount)
+    {
+        mineCounter.text = "" + mineCount;
     }
 }

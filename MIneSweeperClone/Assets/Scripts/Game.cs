@@ -231,6 +231,7 @@ public class Game : MonoBehaviour
     public void ResetGame()
     {
         ClearTiles();
+        Debug.Log("Game Board Reset");
     }
 
     //sets all tiles back to empty tiles
@@ -257,6 +258,7 @@ public class Game : MonoBehaviour
         objectGrid = new GameObject[width, height];
         zoomCam.ZoomCameraOnBoard();
         MakeNewBoard();
+        Debug.Log("New Game Board Made");
     }
     
     //clears the board to change board size

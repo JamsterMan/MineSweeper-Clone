@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class NewGame : MonoBehaviour
 {
-    public TMPro.TMP_Dropdown boardSize;
-    public TMPro.TMP_InputField numMines;
+    private TMPro.TMP_Dropdown boardSize;
+    private TMPro.TMP_InputField numMines;
     public Game game;
 
     private void Start()
@@ -23,8 +23,8 @@ public class NewGame : MonoBehaviour
         int size = 10 + (sizeIndex * 5);//10x10,15x15,20x20,etc
         int mines = int.Parse( numMines.text);
 
-        if(mines > size * size) {
-            mines = size * size;
+        if(mines >= size * size) {
+            mines = (size * size)-1;
         }
 
         game.NewBoard(size, size, mines);

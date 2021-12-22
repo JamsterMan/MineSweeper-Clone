@@ -79,7 +79,7 @@ SpriteRenderer:
   m_Size: {x: 0.64, y: 0.64}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
-  m_WasSpriteAssigned: 1
+  m_WasSpriteAssigned: 0
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
 --- !u!114 &5698521135934406151
@@ -98,8 +98,8 @@ MonoBehaviour:
   mineNeighbors: 0
   isCovered: 1
   isFlaged: 0
-  coverSprite: {fileID: 21300000, guid: 53c3e22bb4bb2714b9a88b11076ee30a, type: 3}
-  flagSprite: {fileID: 21300000, guid: 23ecf7e4d2a8d7443a945739cf97289b, type: 3}
-  hitMineSprite: {fileID: 21300000, guid: 4fa82db2ae4e5ca4e886f67e432fa014, type: 3}
-  missFlagSprite: {fileID: 21300000, guid: 04d509ad6e9c9c84b9ccfc1c883fd331, type: 3}
-  highlightSprite: {fileID: 21300000, guid: 5e0468b9b4c631d4d99a1ce81c15e211, type: 3}
+  coverSprite: {fileID: 21300000, guid: d984956fe2b6bdd419cf4363d9ab7dbe, type: 3}
+  flagSprite: {fileID: 21300000, guid: d12f68c590c071c4ab8b3a95fb9ccdb0, type: 3}
+  hitMineSprite: {fileID: 21300000, guid: d6cda82df88f88245a183bc00305ce91, type: 3}
+  missFlagSprite: {fileID: 21300000, guid: 939125d018b1de84da1d5540f4836853, type: 3}
+  highlightSprite: {fileID: 21300000, guid: cb8d5592d65e5c741926285b27bf9e59, type: 3}

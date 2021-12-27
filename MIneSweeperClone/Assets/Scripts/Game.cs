@@ -204,6 +204,8 @@ public class Game : MonoBehaviour
             if (correctFlags == numFlags) {
                 if (correctFlags == numMines || correctFlags + numCoveredTiles == numMines) {
                     Debug.Log("Victory");
+                    FindObjectOfType<AudioManager>().Play("Victory");
+
                     gameOver = true;//stop unflaging and revealing after a win
                     for (int i = 0; i < width; i++) {//flag tile that are not flagged yet
                         for (int j = 0; j < height; j++) {
@@ -227,6 +229,8 @@ public class Game : MonoBehaviour
         ClearTiles();
         SetStartValues();
         Debug.Log("Game Board Reset");
+
+        FindObjectOfType<AudioManager>().Play("NewBoard");
     }
 
     //sets all tiles back to empty tiles
@@ -253,6 +257,8 @@ public class Game : MonoBehaviour
         MakeNewBoard();
         SetStartValues();//sets values used to tell win/loss to starting vals
         Debug.Log("New Game Board Made");
+
+        FindObjectOfType<AudioManager>().Play("NewBoard");
     }
     
     //clears the board to change board size

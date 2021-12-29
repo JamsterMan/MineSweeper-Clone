@@ -7235,6 +7235,10 @@ MonoBehaviour:
     volume: 1
     pitch: 1
     source: {fileID: 0}
+  soundGroup: {fileID: -8320149858963470413, guid: 8e8a8d22094f8ec4eb3e45c10f0b475c,
+    type: 2}
+  musicGroup: {fileID: -4058161506693416144, guid: 8e8a8d22094f8ec4eb3e45c10f0b475c,
+    type: 2}
 --- !u!4 &1753534950
 Transform:
   m_ObjectHideFlags: 0

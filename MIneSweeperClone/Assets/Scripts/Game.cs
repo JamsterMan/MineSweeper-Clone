@@ -204,7 +204,8 @@ public class Game : MonoBehaviour
             if (correctFlags == numFlags) {
                 if (correctFlags == numMines || correctFlags + numCoveredTiles == numMines) {
                     Debug.Log("Victory");
-                    FindObjectOfType<AudioManager>().Play("Victory");
+
+                    FindObjectOfType<AudioManager>().Play("Victory");//plays a victory sound
 
                     gameOver = true;//stop unflaging and revealing after a win
                     for (int i = 0; i < width; i++) {//flag tile that are not flagged yet

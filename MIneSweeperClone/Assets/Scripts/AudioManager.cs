@@ -9,7 +9,7 @@ public class AudioManager : MonoBehaviour
     public AudioMixerGroup soundGroup;
     public AudioMixerGroup musicGroup;
 
-    // Start is called before the first frame update
+    
     void Awake()
     {
         foreach(Sound s in sounds) {
@@ -23,6 +23,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    //plays the sound corrisponding to soundName
     public void Play(string soundName)
     {
         Sound s = Array.Find(sounds, sound => sound.name == soundName);
@@ -30,5 +31,10 @@ public class AudioManager : MonoBehaviour
             return;
         s.source.Play();
 
+    }
+
+    public void ButtonClickSound()
+    {
+        Play("ButtonClick");
     }
 }

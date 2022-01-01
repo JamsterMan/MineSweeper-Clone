@@ -7264,36 +7264,49 @@ MonoBehaviour:
     clip: {fileID: 8300000, guid: 155dc39d47bd7934992bdd9ec460f9a5, type: 3}
     volume: 1
     pitch: 1
+    isMusic: 0
     source: {fileID: 0}
   - name: Flag
     clip: {fileID: 8300000, guid: 7231a39403259b64c905b0438e93478c, type: 3}
     volume: 1
     pitch: 1
+    isMusic: 0
     source: {fileID: 0}
   - name: Unflag
     clip: {fileID: 8300000, guid: ec23bcd07e502344b88e5b70c8ce5446, type: 3}
     volume: 1
     pitch: 1
+    isMusic: 0
     source: {fileID: 0}
   - name: Victory
     clip: {fileID: 8300000, guid: bf82a0da1c267634389b00eefa764a23, type: 3}
     volume: 1
     pitch: 1
+    isMusic: 0
     source: {fileID: 0}
   - name: Defeat
     clip: {fileID: 8300000, guid: 8b3fcea67156fce4a809f9d3551de2f7, type: 3}
     volume: 1
     pitch: 1
+    isMusic: 0
     source: {fileID: 0}
   - name: NewBoard
     clip: {fileID: 8300000, guid: 26c2573eec1495940acdc64dbd47ab88, type: 3}
     volume: 1
     pitch: 1
+    isMusic: 0
     source: {fileID: 0}
   - name: ButtonClick
     clip: {fileID: 8300000, guid: fcae21901ebd41e44aa6c9f02911851a, type: 3}
     volume: 1
     pitch: 1
+    isMusic: 0
+    source: {fileID: 0}
+  - name: Music
+    clip: {fileID: 8300000, guid: 815d5b0e7c5eb9a4890abce1c61adc6f, type: 3}
+    volume: 1
+    pitch: 1
+    isMusic: 1
     source: {fileID: 0}
   soundGroup: {fileID: -8320149858963470413, guid: 8e8a8d22094f8ec4eb3e45c10f0b475c,
     type: 2}

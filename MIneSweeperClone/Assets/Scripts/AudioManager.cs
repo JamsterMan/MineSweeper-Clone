@@ -12,15 +12,26 @@ public class AudioManager : MonoBehaviour
     
     void Awake()
     {
-        foreach(Sound s in sounds) {
+        foreach (Sound s in sounds) {
             s.source = gameObject.AddComponent<AudioSource>();
             s.source.clip = s.clip;
 
             s.source.volume = s.volume;
             s.source.pitch = s.pitch;
 
-            s.source.outputAudioMixerGroup = soundGroup;
+            if (s.isMusic) {
+                s.source.outputAudioMixerGroup = musicGroup;
+                s.source.loop = true;
+            } else {
+                s.source.outputAudioMixerGroup = soundGroup;
+            }
+        
         }
+    }
+
+    private void Start()
+    {
+        Play("Music");
     }
 
     //plays the sound corrisponding to soundName

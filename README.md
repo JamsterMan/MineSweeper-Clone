@@ -1,2 +1,4 @@
 # MineSweeper-Clone
-Clone of MineSweeper
+A clone of MineSweeper.
+
+For practice coding in c# and Unity.
